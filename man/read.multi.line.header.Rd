@@ -1,8 +1,9 @@
-\name{read.multi.line.header.Rd}
-\alias{read.multi.line.header.Rd}
+\name{read.multi.line.header}
+\alias{read.multi.line.header}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 %%  ~~function to do ... ~~
+Data input with header over multiple lines
 }
 \description{
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
@@ -38,7 +39,7 @@ Field separator character. Defaule = ",", i.e., csv.
 A data.frame.
 \references{
 %% ~put references to the literature/web site here ~
-Made for anser on stack overflow: https://stackoverflow.com/a/55859925/2706826
+Made for answer on stack overflow \url{https://stackoverflow.com/a/55859925/2706826}
 }
 \author{
 %%  ~~who you are~~
