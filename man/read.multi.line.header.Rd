@@ -68,7 +68,4 @@ Gerry Ryan
 ## 5     CCW        18.15     200.51
 ## 6     CCW        17.45     190.59
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }% use one of  RShowDoc("KEYWORDS")
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+

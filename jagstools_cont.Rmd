@@ -1,0 +1,213 @@
+
+
+## FISHFREAKS
+
+Analyse cell proportions in 2x2 contingency tables, get results out easily with jagstools, plot.
+
+### If necessary install ```jagstools```
+```{r jagstools, eval=FALSE}
+install.packages('devtools')
+library("devtools")
+install_github(repo='jagstools', username='johnbaums')
+
+```
+
+
+Get your packages on.
+
+```{r}
+library("jagstools")
+library("R2jags")
+library("ggplot2")
+```
+
+
+### Fish-eating Freaks
+Is it true that cat lovers become like cats and eat heaps of fish?
+
+Only a Bayesian 2x2 contingency table analysis could possibly dispel this vile besmirchery.
+
+Interview question one: *"Do you like dogs or cats better?"*
+
+Answers must be either *"cat"* or *"dog"*.
+
+Interview question two: *"Do you eat fish?"*
+
+Answers must be either *"yes"* or *"no"*.
+
+There are 24 respondents.
+
+Data are:
+```{r data}
+contdat1 <- c("dog", "cat", "dog", "dog", "cat", "cat", "dog", "cat", "dog", "dog", "cat", "cat", "dog", "cat", "dog", "dog", "cat", "cat", "dog", "cat", "dog", "dog", "cat", "cat")
+
+contdat2 <- c("yes", "yes", "no", "no", "yes", "yes", "no", "yes", "no", "no", "yes", "yes", "yes", "yes", "no", "no", "yes", "yes", "no", "yes", "no", "no", "yes", "yes")
+```
+
+So 
+
+
+Our model looks like:
+```{r}
+cat('
+    model{
+    for (i in 1:j) {
+    log(p[i]) <- k1[A[i]] + k2[B[i]] + k12[A[i], B[i]]
+    }
+    
+    pp <- sum(p[1:j])
+    
+    for (i in 1:j) {
+    pr[i] <- p[i]/pp
+    }
+    
+    odds_2 <- pr[4]/pr[3]
+    odds_1 <- pr[2]/pr[1]
+    odds_ratio <- odds_2 / odds_1
+    
+    d[1:j] ~ dmulti(pr[], N)  
+    
+    k1[1] <- 0 #  reference condition
+    k2[1] <- 0   
+    k12[1, 1] <- 0
+    k12[1, 2] <- 0
+    k12[2, 1] <- 0
+    
+    k1[2] ~ dnorm(0, 0.000001)
+    k2[2] ~ dnorm(0, 0.000001)
+    k12[2, 2] ~ dnorm(0, 0.000001)
+        
+    
+    }
+    
+    ',file=(model.cont<-tempfile()))
+```
+Why? Look at Mick's book is why. No more questions.
+
+
+To input our data ino the model we do this
+```{r mung data}
+contdat <- list(contdat1, contdat2)
+dat <-table(contdat)
+  
+j <- 4 #number of elements in 2x2 contingency table
+N <- sum(dat) # number of samples
+d <- c(dat)
+A <- c(1, 1, 2, 2) # categories in contingency table
+B <- c(1, 2, 1, 2) # categories in contingency table
+```
+
+
+JAGS need more stuff
+```{r jags stuff}
+jags.data <- list(j = j, N = N, d = d, A = A, B = B)
+
+jags.inits <- NULL
+  
+jags.params <- c("odds_ratio", "k1", "k2", "k12", "pr")
+
+n.burnin <- 10000
+
+n.iter <- 50000
+
+n.thin <- 1
+
+n.chains <- 3
+```
+
+Now call our model with R2jags
+```{r call}
+catfish <- jags(data = jags.data,
+                inits = jags.inits,
+                parameters.to.save = jags.params,
+                model.file = model.cont,
+                n.chains = n.chains,
+                n.iter = n.iter,
+                n.burnin = n.burnin,
+                n.thin = n.thin)
+```
+
+We can look at our JAGS model output now
+```{r}
+catfish
+```
+
+Hmmm, looks fishy. What is that wierd object anyway? Don't be koi about it.
+```{r}
+class(catfish)
+```
+
+`rjags` what the smoking salmon does that mean?
+```{r}
+is.list(catfish)
+```
+
+List? Booooring
+
+```{r}
+str(catfish)
+```
+Ewwwww. Yuk.
+
+I want my results in useable format!
+
+```{r}
+catfish$BUGSoutput$mean$pr
+```
+
+Ur list sux mister R2jags. 
+
+
+But no need to reinvent the whale.
+
+Yay `jagstools`
+
+Let's get those precious precious data out of the nasty list
+
+```{r}
+odds <- jagsresults(catfish, params = c("odds_ratio"))
+
+pr <- jagsresults(catfish, params = c( "pr"))
+```
+
+```{r}
+odds
+
+pr
+```
+
+Wow even a goldfish could do that! It looks much better.
+
+Now I want to plot them to see if those cat people really are *fishy freaks*
+
+And not all those data, just the mean and 95% credible interval.
+
+```{r}
+fishypr <- pr[, c('mean', "2.5%", "97.5%")]
+colnames(fishypr)[2] <- 'CIlower'
+colnames(fishypr)[3] <- 'CIupper'
+fishypr <- as.data.frame(fishypr)
+```
+
+
+Ooh look here's a function I already had to do that.
+```{r}
+cplot <- function (cpdat, q = c("Normal", "Normal", "Fisheater", "Fisheater"), ws = c("Cat freak", "Dog lover", "Cat freak", "Dog lover")){
+  plotdata <- as.data.frame(cbind(q, ws, cpdat))
+  
+  ggplot(plotdata, aes(x = ws, y = mean)) + geom_bar(width = 0.75, stat = 'identity', aes(x = ws, fill = ws), colour = "grey") + facet_grid(. ~ q) + scale_fill_manual(values = c("red", "yellow"), guide = 'none') + labs(x = NULL, y = NULL) + geom_errorbar(position = "dodge", width = 0.25, aes(ymin = CIlower, ymax = CIupper))
+}
+
+```
+
+
+
+```{r}
+cplot(fishypr)
+```
+
+##Oh.
+
+##My.
+
+##Cod.
