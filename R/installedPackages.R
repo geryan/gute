@@ -37,7 +37,8 @@ install.packages(c("ggplot2",
                    "cowplot",
                    "doMC"
 				   "rasterVis"
-				   "viridis"), dependencies = TRUE)
+				   "viridis",
+		  "rerddap"), dependencies = TRUE)
 
 
 
