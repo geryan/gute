@@ -38,7 +38,8 @@ install.packages(c("ggplot2",
                    "doMC"
 				   "rasterVis"
 				   "viridis",
-		  "rerddap"), dependencies = TRUE)
+		  "rerddap",
+		  "furrr"), dependencies = TRUE)
 
 
 
