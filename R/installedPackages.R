@@ -39,7 +39,8 @@ install.packages(c("ggplot2",
 				   "rasterVis"
 				   "viridis",
 		  "rerddap",
-		  "furrr"), dependencies = TRUE)
+		  "furrr",
+		  "reprex"), dependencies = TRUE)
 
 
 
