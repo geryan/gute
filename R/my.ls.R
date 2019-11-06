@@ -1,6 +1,11 @@
 # From https://r.789695.n4.nabble.com/Size-of-an-object-in-workspace-td823649.html
 
-my.ls <- function(pos=1, sorted=F){
+# Creates list of workspace objects with name, object.size and type.
+
+# if sorted = FALSE then is sorted alphabetically
+# if sorted = TRUE then is sorted by object size
+
+my.ls <- function(pos=1, sorted=FALSE){
   .result <- sapply(ls(pos=pos, all.names=TRUE),
                     function(..x)object.size(eval(as.symbol(..x))))
   if (sorted){
