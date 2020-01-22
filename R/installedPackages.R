@@ -1,49 +1,58 @@
 
 # INSTALLED PACKAGES
 
-install.packages(c("ggplot2",
-                   "rjags",
-                   "R2jags", #does jags
-                   "versions", # helps install old versions of packages
-                   "bbmle",
-                   "Rcpp",
-                   "tidyr", # to hadley all the better with
-                   "dplyr",
-                   "lazyeval",
-                   "purrr",
-                   "magrittr",
-                   "readr",
-                   "readxl",
-                   "tidyverse",
-                   "reshape2",
-                   "devtools",
-                   "knitr",
-                   "rmarkdown",
-                   "extraDistr",
-                   "xslx",
-                   "magrittr",
-                   "tibble",
-                   "sf",
-                   "lwgeom",
-                   "rgdal",
-                   "lubridate",
-                   "foreach",
-                   "doMC",
-                   "future",
-                   "future.apply",
-                   "dismo",
-                   "gbm",
-                   "raster",
-                   "cowplot",
-                   "doMC"
-				   "rasterVis"
-				   "viridis",
-		  "rerddap",
-		  "furrr",
-		  "reprex"), dependencies = TRUE)
+install.packages(
+  pckgs = c(
+    "bbmle",
+    #"cowplot"
+    "devtools",
+    "dismo",
+    "dplyr",
+    "doMC",
+    "extraDistr",
+    "foreach",
+    "furrr",
+    "future",
+    "future.apply",
+    "gbm",
+    "ggplot2",
+    "knitr",
+    "lazyeval",
+    "lubridate",
+    "lwgeom",
+    "magrittr",
+    "patchwork",
+    "purrr",
+    "R2jags",
+    "raster",
+    "rasterVis",
+    "Rcpp",
+    "readr",
+    "readxl",
+    "reprex",
+    "rerddap",
+    #"reshape2",
+    "rgdal",
+    "rjags",
+    "rlang",
+    "rmarkdown",
+    "sf",
+    "stringr",
+    "tibble",
+    "tidyr",
+    #"tidyverse",
+    "versions",
+    "viridis",
+    "xslx"
+  ),
+  dependencies = TRUE
+)
 
+library("devtools")
 
-
+install_github("johnbaums/jagstools")
+install_github("steps-dev/steps")
+install_github("mstrimas/metacapa")
 
 #install.versions(pkgs = "rjags", versions = "3-15") # so don't get error in windows; seems to be from current rjags version
 
@@ -51,12 +60,6 @@ install.packages(c("ggplot2",
 #                 repo = "http://R-Forge.R-project.org") # uses AD Model Builder to fit non-linear models to SECR
 
 #install.packages("nimble", repos = "http://r-nimble.org", type = "source") # use BUGS-syntax models in R
-
-library("devtools")
-
-install_github('johnbaums/jagstools') # for working with JAGS output, made by JBB hissef
-
-install_github('steps-dev/steps')
 
 # install_github("rasmusab/beepr") # pingr is to make a ping noise at the end of a model run, rasmusab is who done made it, now called beepr
 # 
