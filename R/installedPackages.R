@@ -37,6 +37,7 @@ install.packages(
     "rlang",
     "rmarkdown",
     "sf",
+    "sp",
     "stringr",
     "tibble",
     "tidyr",
