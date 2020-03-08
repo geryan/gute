@@ -2,7 +2,7 @@
 # INSTALLED PACKAGES
 
 install.packages(
-  pckgs = c(
+  pkgs = c(
     "bbmle",
     #"cowplot"
     "devtools",
